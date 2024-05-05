@@ -32,9 +32,11 @@ public class Lottery {
 	public int compareLottery() {
 		int matchingNo = 0;
 		for(int i=0; i<5; i++) {
-			if(this.lotteryNumbers[i] == this.userNumbers[i]) {
-				this.matchDigit.add(this.lotteryNumbers[i]);
-				matchingNo++;
+			for(int j=0; j<5; j++) {
+				if(this.lotteryNumbers[i] == this.userNumbers[j]) {
+					this.matchDigit.add(this.lotteryNumbers[i]);
+					matchingNo++;
+				}
 			}
 		}
 		return matchingNo;

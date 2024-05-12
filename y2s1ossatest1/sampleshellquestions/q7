@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "Multiplication table creator" 
+echo "Enter the number : "
+read num
+echo "Enter the range : "
+read range
+
+for(( i=1 ; i <= range ; i++));
+do
+	ans=$((i * num))
+	echo "$i x $num = $ans"
+done
+  
+
+

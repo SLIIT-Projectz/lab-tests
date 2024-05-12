@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Enter the range : "
+read range
+
+if test $range -lt 2; then
+    echo "No prime numbers"
+    exit 1
+fi
+
+for ((i = 2; i < range; i++)); do
+    is_prime=true
+    for ((j = 2; j < i; j++)); do
+        if [ $((i % j)) -eq 0 ]; then
+            is_prime=false
+            break
+        fi
+    done
+    if $is_prime; then
+        echo $i
+    fi
+done
+

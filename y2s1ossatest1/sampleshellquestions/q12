@@ -1,0 +1,36 @@
+#!/bin/bash
+ 
+count=0
+declare -a myArray
+declare -a reArray
+
+# Prompt the user to enter a number
+echo "Enter the number : "
+read input_num
+
+# Reverse the number and store it in myArray
+reversed_num=$(echo $input_num | rev)
+for ((i = 0; i < ${#reversed_num}; i++)); do
+    myArray[$i]=${reversed_num:$i:1}
+done
+
+echo "Reversed Array : ${myArray[@]}"
+
+is_palindrome=true
+count2=$(expr ${#reversed_num} / 2)
+
+# Check for palindrome
+for ((i = 0; i < $count2; i++)); do
+    if [ "${myArray[i]}" != "${myArray[${#reversed_num}-i-1]}" ]; then
+        is_palindrome=false
+        break
+    fi
+done
+
+# Display the result
+if $is_palindrome; then
+    echo "The number is a palindrome"
+else
+    echo "The number is not a palindrome"
+fi
+

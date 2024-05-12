@@ -1,0 +1,15 @@
+#!/bin/bash
+
+minimum=$1
+
+for(( i=2 ; i<=$# ; i++ ));
+do
+	if [ $minimum -gt ${!i} ] 
+	then 
+		minimum=${!i}
+	fi
+done
+
+echo "The smallest number is : $minimum"
+
+

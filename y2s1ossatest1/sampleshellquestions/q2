@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "Enter the salary : "
+read salary;
+
+if [ $salary -lt 1500 ]
+then 
+	HRA=`expr $salary \* 10 \/ 100`
+	DA=`expr $salary - $HRA`
+elif [ $salary -ge 1500 ]
+then 
+	HRA=500
+	DA=`expr $salary \* 98 \/ 100` 
+fi
+
+echo "the HRA : $HRA"
+echo "the DA : $DA"
+echo "salary : $salary"
+
+
+

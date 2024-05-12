@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Enter the number 1 : "
+read num1
+echo "Enter the number 2 : "
+read num2
+
+value=$((num1 ** num2)) 
+
+echo "Value : $value"
+
+

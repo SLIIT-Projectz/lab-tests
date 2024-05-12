@@ -1,0 +1,19 @@
+#!/bin/bash
+
+ls
+
+echo "Enter the first file name : "
+read name1
+echo "Enter the second file name : "
+read name2
+
+if cmp -s $name1 $name2;
+then
+	echo "Files seems same ... "
+	rm $name2
+	echo "File $name2 deleted successfully!"
+else
+	echo "Files are different ... "
+fi
+
+

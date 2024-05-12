@@ -1,0 +1,38 @@
+#!/bin/bash
+
+echo "[1] Addition"
+echo "[2] Substraction"
+echo "[3] Multiplication"
+echo "[4] Division"
+
+
+echo "Enter the number from above to perform the relevant calculation : "
+read type
+
+echo "Enter the number 1 : "
+read num1
+echo "Enter the number 2 : "
+read num2
+
+case $type in
+	1)  
+		output=$((num1 + num2))
+		;;
+	"2") 
+		output=`expr $num1 - $num2`
+		;;  
+	"3")   
+		output=`expr $num1 \* $num2`
+		;;  
+  	"4")  
+		output=`expr $num1 \/ $num2`
+		;; 
+	*)
+		output=0 
+		echo "you have entered an invalid calculation type!"
+		;;
+esac
+
+echo "The output is $output"  
+ 
+ 

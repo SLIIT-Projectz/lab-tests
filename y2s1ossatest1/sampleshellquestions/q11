@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Enter the number to count : "
+read num
+
+count=0
+
+while [ $num -ne 0 ];
+do
+	num=`expr $num \/ 10`
+	((count++))
+done
+
+echo "Total number of digits : $count"
+

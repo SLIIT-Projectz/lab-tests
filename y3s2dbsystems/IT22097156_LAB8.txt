@@ -1,0 +1,441 @@
+Example 01 : Your first PL/SQL Program 
+
+SQL> DECLARE
+  2  BEGIN
+  3   DBMS_OUTPUT.PUT_LINE('This is my first PL/SQL Program');
+  4  END;
+  5  /
+This is my first PL/SQL Program
+
+PL/SQL procedure successfully completed.
+
+
+Example 02 : Using variables
+
+SQL> DECLARE
+  2  var_cname varchar(12);
+  3  var_clno  char(3) := 'c01';
+  4  BEGIN
+  5  SELECT c.name INTO var_cname
+  6  FROM  client c
+  7  WHERE c.clno = var_clno;
+  8  DBMS_OUTPUT.PUT_LINE('Name of the client with clno : '
+  9  || var_clno || ' is '  || var_cname  );
+ 10  END;
+ 11  /
+Name of the client with clno : c01 is John Smith
+
+PL/SQL procedure successfully completed.
+
+
+
+
+Exercise 01 
+Write a PL/SQL to get the current price of a stock belongs to company ‘IBM’. Store the company 
+name (‘IBM’) in a variable.  
+
+DECLARE
+	var_current_price NUMBER(6,2);
+	var_company_name CHAR(7) := 'IBM';
+BEGIN
+	SELECT s.price INTO var_current_price 
+	FROM stock s
+	WHERE var_company_name = s.company;
+
+	DBMS_OUTPUT.PUT_LINE('Current Price of ' || var_company_name || ' is ' || var_current_price);
+END;
+/
+
+Current Price of IBM     is 70
+
+PL/SQL procedure successfully completed.
+
+
+
+
+Scope of Variables
+
+DECLARE 
+var_num1 number;  
+var_num2 number;  
+BEGIN  
+var_num1 := 100;  
+var_num2 := 200;  
+DECLARE  
+var_mult number;  
+BEGIN  
+var_mult := var_num1 * var_num2; 
+DBMS_OUTPUT.PUT_LINE('Output is  ' || var_mult); 
+END; 
+END;  
+ / 
+
+SQL> DECLARE
+  2  var_num1 number;
+  3  var_num2 number;
+  4  BEGIN
+  5  var_num1 := 100;
+  6  var_num2 := 200;
+  7  DECLARE
+  8  var_mult number;
+  9  BEGIN
+ 10  var_mult := var_num1 * var_num2;
+ 11  DBMS_OUTPUT.PUT_LINE('Output is  ' || var_mult);
+ 12  END;
+ 13  END;
+ 14   /
+Output is  20000
+
+PL/SQL procedure successfully completed.
+
+
+Example 03 : Accessing a Record 
+
+SQL> DECLARE
+  2     client_rec client%ROWTYPE;
+  3     var_clno client.clno%TYPE := 'c01';
+  4  BEGIN
+  5     select * into client_rec
+  6     from client c
+  7     WHERE c.clno = var_clno ;
+  8
+  9     DBMS_OUTPUT.PUT_LINE('Client No : ' || client_rec.clno );
+ 10     DBMS_OUTPUT.PUT_LINE('Name : ' || client_rec.name );
+ 11     DBMS_OUTPUT.PUT_LINE('Address : ' || client_rec.address );
+ 12  END;
+ 13  /
+Client No : c01
+Name : John Smith
+Address : 3 East Av, Bently, WA 6102
+
+PL/SQL procedure successfully completed.
+
+
+
+
+
+Exercise 02  
+ 
+Write a PL/SQL to display a message for a given stock of ‘IBM’ company according to the 
+following criteria. 
+Current price < 45       -  'Current price is very low !'       
+45<=Current price < 55   -  'Current price is low !'      
+55<=Current price < 65   -    ‘Current price is medium !’     
+65<=Current price < 75   -    'Current price is medium high !’      
+75<=Current price        -   'Current price is high!'
+Store the company name in a variable. 
+
+
+DECLARE
+	var_current_price NUMBER(6,2);
+	var_company_name CHAR(7) := 'IBM';
+BEGIN
+	SELECT s.price INTO var_current_price 
+	FROM stock s
+	WHERE var_company_name = s.company;
+
+	IF var_current_price < 45 THEN
+    		DBMS_OUTPUT.PUT_LINE('Current price is very low!');
+  	ELSIF var_current_price >= 45 AND var_current_price < 55 THEN
+    		DBMS_OUTPUT.PUT_LINE('Current price is low!');
+  	ELSIF var_current_price >= 55 AND var_current_price < 65 THEN
+    		DBMS_OUTPUT.PUT_LINE('Current price is medium!');
+  	ELSIF var_current_price >= 65 AND var_current_price < 75 THEN
+    		DBMS_OUTPUT.PUT_LINE('Current price is medium high!');
+  	ELSE
+    		DBMS_OUTPUT.PUT_LINE('Current price is high!');
+  	END IF;
+
+	DBMS_OUTPUT.PUT_LINE('Current Price =' || var_current_price);
+END;
+/
+
+Current price is medium high!
+Current Price =70
+
+PL/SQL procedure successfully completed.
+
+
+Exercise 03 
+Write three PL/SQLs to draw the following shape. Use all three types of loops in each PL/SQL.
+9 9 9 9 9 9 9 9 9 
+8 8 8 8 8 8 8 8 
+7 7 7 7 7 7 7 
+6 6 6 6 6 6 
+5 5 5 5 5 
+4 4 4 4 
+3 3 3 
+2 2 
+1 
+
+Using Simple Loop
+
+DECLARE
+  i NUMBER := 9;
+  j NUMBER;
+BEGIN
+  LOOP
+    j := 1;
+    LOOP
+      DBMS_OUTPUT.PUT(i || ' ');
+      j := j + 1;
+      EXIT WHEN j > i;  -- Exit inner loop when j exceeds i
+    END LOOP;
+    
+    DBMS_OUTPUT.NEW_LINE;
+    
+    i := i - 1;
+    EXIT WHEN i = 0;  -- Exit outer loop when i reaches 0
+  END LOOP;
+END;
+/
+
+
+Using While Loop
+
+DECLARE
+  i NUMBER := 9;
+BEGIN
+  WHILE i >= 1 LOOP
+    DBMS_OUTPUT.PUT_LINE(RPAD(i, i * 2, ' ' || i));
+    i := i - 1;
+  END LOOP;
+END;
+/
+
+
+Using For Loop
+
+DECLARE
+  i NUMBER;
+  j NUMBER;
+BEGIN
+  FOR i IN REVERSE 1..9 LOOP
+    FOR j IN 1..i LOOP
+      DBMS_OUTPUT.PUT(i || ' ');
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+  END LOOP;
+END;
+/
+
+
+
+Example 4 : Implicit Cursor 
+
+SQL> DECLARE
+  2  var_rows number(5);
+  3  BEGIN
+  4  UPDATE purchase p
+  5  SET p.qty  = p.qty + 100;
+  6  IF SQL%NOTFOUND THEN
+  7  dbms_output.put_line('None of the quantities were updated');
+  8  ELSIF SQL%FOUND THEN
+  9  var_rows := SQL%ROWCOUNT;
+ 10  dbms_output.put_line('Quantities for ' || var_rows ||
+ 11  ' purchases were updated');
+ 12  END IF;
+ 13  END;
+ 14  /
+Quantities for 10 purchases were updated
+
+PL/SQL procedure successfully completed.
+
+
+Example 5 : Implicit Cursor with For Loops 
+
+
+SQL> DECLARE
+  2  CURSOR stock_cur IS
+  3  SELECT s.company, s.price
+  4  FROM stock s;
+  5  stock_rec stock_cur%rowtype;
+  6  BEGIN
+  7  FOR stock_rec in stock_cur LOOP
+  8  dbms_output.put_line('Company : ' || stock_rec.company
+  9  ||' - Current Price : ' ||stock_rec.price);
+ 10  END LOOP;
+ 11  END;
+ 12  /
+Company : BHP     - Current Price : 10.5
+Company : IBM     - Current Price : 70
+Company : INTEL   - Current Price : 76.5
+Company : FORD    - Current Price : 40
+Company : GM      - Current Price : 60
+Company : INFOSYS - Current Price : 45
+
+
+PL/SQL procedure successfully completed.
+
+
+Exercise 04
+
+The companies have decided to offer a bonus to the loyal clients who have purchased 
+stocks of their company. A client who has purchased stocks before 1st January 2002 gets 
+an additional 50 stocks as bonus. Those who have purchased stocks before 1st January 
+2001 get 100 stocks and for the purchases done before 1st January 2000 will be given 
+150 stocks as bonus. 
+Write a PL/SQL block to update the purchase table. Increase the quantities as given 
+above.  
+You must use a cursor for loop for this.
+
+
+SQL> SELECT * FROM purchase;
+
+CLN COMPANY PDATE            QTY      PRICE
+--- ------- --------- ---------- ----------
+c01 BHP     02-OCT-01       1000         12
+c01 BHP     08-JUN-02       2000       10.5
+c01 IBM     12-FEB-00        500         58
+c01 IBM     10-APR-01       1200         65
+c01 INFOSYS 11-AUG-01       1000         64
+c02 INTEL   30-JAN-00        300         35
+c02 INTEL   30-JAN-01        400       54.5
+c02 INTEL   02-OCT-01        200         60
+c02 FORD    05-OCT-99        300         40
+c02 GM      12-DEC-00        500         55
+
+10 rows selected.
+
+
+
+DECLARE
+  var_rows NUMBER(5) := 0;
+  CURSOR purchase_cur IS
+    SELECT p.clno, p.company, p.pdate, p.qty
+    FROM purchase p;
+  purchse_rec purchase_cur%rowtype;
+
+  bonus NUMBER;
+  
+BEGIN
+  FOR purchse_rec IN purchase_cur LOOP
+    IF purchse_rec.pdate < '01-JAN-00' THEN
+      bonus := 150;
+    ELSIF purchse_rec.pdate < '01-JAN-01' THEN
+      bonus := 100;
+    ELSIF purchse_rec.pdate < '01-JAN-02' THEN
+      bonus := 50;
+    ELSE
+      bonus := 0;
+    END IF;
+
+    IF bonus > 0 THEN
+      UPDATE purchase
+      SET qty = qty + bonus
+      WHERE clno = purchse_rec.clno AND pdate = purchse_rec.pdate;
+
+      var_rows := var_rows + 1;
+
+    END IF;
+  END LOOP;
+
+  IF var_rows = 0 THEN
+    DBMS_OUTPUT.PUT_LINE('None of the quantities were updated');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('Quantities for ' || var_rows || ' purchases were updated');
+  END IF;  
+
+END;
+/
+
+Quantities for 9 purchases were updated
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM purchase;
+
+CLN COMPANY PDATE            QTY      PRICE
+--- ------- --------- ---------- ----------
+c01 BHP     02-OCT-01       1050         12
+c01 BHP     08-JUN-02       2000       10.5
+c01 IBM     12-FEB-00        600         58
+c01 IBM     10-APR-01       1250         65
+c01 INFOSYS 11-AUG-01       1050         64
+c02 INTEL   30-JAN-00        400         35
+c02 INTEL   30-JAN-01        450       54.5
+c02 INTEL   02-OCT-01        250         60
+c02 FORD    05-OCT-99        450         40
+c02 GM      12-DEC-00        600         55
+
+10 rows selected.
+
+
+
+Exercise 05 
+
+Write a PL/SQL block with an explicit cursor to perform the same set of actions 
+mentioned in exercise 04. 
+You must use an explicit cursor and a while loop.
+
+DECLARE
+  CURSOR purchase_cur IS
+    SELECT clno, company, pdate, qty FROM purchase;
+  
+  purchse_rec purchase_cur%ROWTYPE;
+  bonus NUMBER;
+  var_rows NUMBER(5) := 0;
+
+BEGIN
+  
+  OPEN purchase_cur;
+  FETCH purchase_cur INTO purchse_rec;
+
+  
+  WHILE purchase_cur%FOUND LOOP
+   
+    IF purchse_rec.pdate < '01-JAN-00' THEN
+      bonus := 150;
+    ELSIF purchse_rec.pdate < '01-JAN-01' THEN
+      bonus := 100;
+    ELSIF purchse_rec.pdate < '01-JAN-02' THEN
+      bonus := 50;
+    ELSE
+      bonus := 0;
+    END IF;
+
+    IF bonus > 0 THEN
+      UPDATE purchase
+      SET qty = qty + bonus
+      WHERE clno = purchse_rec.clno 
+      AND pdate = purchse_rec.pdate; 
+
+      var_rows := var_rows + 1;
+    END IF;
+
+    FETCH purchase_cur INTO purchse_rec;
+  END LOOP;
+
+  CLOSE purchase_cur;
+
+  IF var_rows = 0 THEN
+    DBMS_OUTPUT.PUT_LINE('None of the quantities were updated');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('Quantities for ' || var_rows || ' purchases were updated');
+  END IF;
+
+END;
+/
+
+Quantities for 9 purchases were updated
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM purchase;
+
+CLN COMPANY PDATE            QTY      PRICE
+--- ------- --------- ---------- ----------
+c01 BHP     02-OCT-01       1100         12
+c01 BHP     08-JUN-02       2000       10.5
+c01 IBM     12-FEB-00        700         58
+c01 IBM     10-APR-01       1300         65
+c01 INFOSYS 11-AUG-01       1100         64
+c02 INTEL   30-JAN-00        500         35
+c02 INTEL   30-JAN-01        500       54.5
+c02 INTEL   02-OCT-01        300         60
+c02 FORD    05-OCT-99        600         40
+c02 GM      12-DEC-00        700         55
+
+10 rows selected.
+
+

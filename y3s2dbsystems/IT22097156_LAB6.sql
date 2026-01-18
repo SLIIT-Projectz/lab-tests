@@ -1,0 +1,108 @@
+-- IT umber: IT22097156
+-- Name : Darshan R
+
+
+-- 1)
+--  a)
+-- Department Table
+CREATE TABLE DEPT (
+    DEPTNO CHAR(3) PRIMARY KEY,
+    DEPTNAME VARCHAR2(36) NOT NULL,
+    MGRNO CHAR(6),
+    ADMRDEPT CHAR(3) NOT NULL
+);
+
+-- Employee Table
+CREATE TABLE EMP (
+    EMPNO CHAR(6) PRIMARY KEY,
+    FIRSTNAME VARCHAR2(12) NOT NULL,
+    MIDINIT CHAR(1),
+    LASTNAME VARCHAR2(15) NOT NULL,
+    WORKDEPT CHAR(3),
+    PHONENO CHAR(9),
+    HIREDATE DATE,
+    JOB CHAR(8),
+    EDLEVEL NUMBER(2),
+    SEX CHAR(1) CHECK (SEX IN ('M','F')),
+    BIRTHDATE DATE,
+    SALARY NUMBER(8,2),
+    BONUS NUMBER(8,2),
+    COMM NUMBER(8,2),
+
+    -- FK Reference
+    CONSTRAINT fk_workdept FOREIGN KEY (WORKDEPT) REFERENCES DEPT(DEPTNO)
+);
+
+--  b)
+-- Departments
+INSERT INTO DEPT VALUES ('A00', 'ADMINISTRATION', '000010', 'A00');
+INSERT INTO DEPT VALUES ('B01', 'FINANCE', '000020', 'A00');
+INSERT INTO DEPT VALUES ('C01', 'IT', '000030', 'A00');
+
+-- Employees
+INSERT INTO EMP VALUES ('000010', 'John', 'A', 'Doe', 'A00', '123456789',
+    DATE '2005-05-10', 'MANAGER', 16, 'M', DATE '1980-02-15', 60000, 2000, 1500);
+
+INSERT INTO EMP VALUES ('000020', 'Mary', 'B', 'Smith', 'B01', '987654321',
+    DATE '2010-07-25', 'ANALYST', 18, 'F', DATE '1985-09-12', 55000, 1500, 1000);
+
+INSERT INTO EMP VALUES ('000030', 'Alex', 'C', 'Brown', 'C01', '555777333',
+    DATE '2012-03-18', 'DESIGNER', 14, 'M', DATE '1990-04-20', 45000, 1000, 500);
+
+
+
+
+
+--1)
+--@?/rdbms/admin/utlxplan.sql
+-- ran inside sql plus
+
+
+-- 2
+EXPLAIN PLAN FOR
+SELECT e.lastname, d.mgrno
+FROM emp e, dept d
+WHERE d.admrdept='A00' AND e.workdept=d.deptno;
+
+
+
+-- 4
+CREATE INDEX XWORKDEPT ON EMP(WORKDEPT);
+
+
+-- 5
+CREATE INDEX XADMRDEPT ON DEPT(ADMRDEPT);
+
+
+-- 6
+EXPLAIN PLAN FOR
+SELECT e.lastname, d.mgrno
+FROM emp e, dept d
+WHERE d.admrdept='A00'
+AND e.workdept=d.deptno
+AND e.job='DESIGNER';
+
+
+
+CREATE INDEX XJOB ON EMP(JOB);
+
+
+
+
+-- 7
+EXPLAIN PLAN FOR
+SELECT AVG(e.salary)
+FROM emp e
+WHERE e.edlevel > 10
+  AND e.salary BETWEEN 30000 AND 70000;
+
+
+
+CREATE INDEX XEDSAL ON EMP(EDLEVEL, SALARY);
+
+
+
+-- 8
+SELECT index_name, table_name
+FROM user_indexes
+WHERE table_name IN ('EMP', 'DEPT');
